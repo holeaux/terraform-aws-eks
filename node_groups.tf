@@ -362,6 +362,7 @@ module "eks_managed_node_group" {
   disable_api_termination = try(each.value.disable_api_termination, var.eks_managed_node_group_defaults.disable_api_termination, null)
   kernel_id               = try(each.value.kernel_id, var.eks_managed_node_group_defaults.kernel_id, null)
   ram_disk_id             = try(each.value.ram_disk_id, var.eks_managed_node_group_defaults.ram_disk_id, null)
+  iam_instance_profile    = try(each.value.iam_instance_profile, var.eks_managed_node_group_defaults.iam_instance_profile, {})
 
   block_device_mappings              = try(each.value.block_device_mappings, var.eks_managed_node_group_defaults.block_device_mappings, {})
   capacity_reservation_specification = try(each.value.capacity_reservation_specification, var.eks_managed_node_group_defaults.capacity_reservation_specification, {})

@@ -539,6 +539,12 @@ variable "iam_role_policy_statements" {
   default     = []
 }
 
+variable "iam_instance_profile" {
+  description = "Instance Profile used in custom launch template"
+  type        = any
+  default     = {}
+}
+
 ################################################################################
 # Autoscaling Group Schedule
 ################################################################################

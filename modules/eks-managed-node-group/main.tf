@@ -170,13 +170,14 @@ resource "aws_launch_template" "this" {
 
   # Set on EKS managed node group, will fail if set here
   # https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html#launch-template-basics
-  # dynamic "iam_instance_profile" {
-  #   for_each = [var.iam_instance_profile]
-  #   content {
-  #     name = lookup(var.iam_instance_profile, "name", null)
-  #     arn  = lookup(var.iam_instance_profile, "arn", null)
-  #   }
-  # }
+  dynamic "iam_instance_profile" {
+    for_each = [var.iam_instance_profile]
+
+    content {
+      name = lookup(var.iam_instance_profile, "name", null)
+      arn  = lookup(var.iam_instance_profile, "arn", null)
+    }
+  }
 
   image_id = var.ami_id
   # Set on EKS managed node group, will fail if set here
@@ -379,8 +380,10 @@ data "aws_ssm_parameter" "ami" {
 
 locals {
   launch_template_id = var.create && var.create_launch_template ? try(aws_launch_template.this[0].id, null) : var.launch_template_id
+  # launch_template_id = aws_launch_template.this[0].id
   # Change order to allow users to set version priority before using defaults
   launch_template_version = coalesce(var.launch_template_version, try(aws_launch_template.this[0].default_version, "$Default"))
+  # launch_template_version = aws_launch_template.this[0].default_version
 }
 
 resource "aws_eks_node_group" "this" {
